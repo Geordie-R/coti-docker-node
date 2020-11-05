@@ -3,7 +3,7 @@
 set -eu -o pipefail # fail on error , debug all lines
 
 LOG_LOCATION=/root/
-exec > >(tee -i $LOG_LOCATION/cnode.log)
+exec > >(tee -i $LOG_LOCATION/dockercnode.log)
 exec 2>&1
 
 
@@ -22,8 +22,6 @@ new_version_tag=${new_version_tag%"\""}
 #new_version_tag=1.4.1 for example
 
 echo "Latest version is $new_version_tag"
-
-read -n 1 -r -s -p $'Press enter to continue...\n'
 
 echo "Welome to the COTI docker installer .  We will begin to ask you a series of questions.  Please have to hand:"
 echo "✅ Your SSH Port No"
@@ -155,9 +153,9 @@ EOF
 
 FILE=/home/$username/docker/data/FullNode1_clusterstamp.csv
 if [ -f "$FILE" ]; then
-    echo "${YELLOW}$FILE already exists, no need to download the clusterstamp file {COLOR_RESET}"
+    echo "${YELLOW}$FILE already exists, no need to download the clusterstamp file ${COLOR_RESET}"
 else
-    echo "${YELLOW}$FILE does not exist, downloading the clusterstamp now... {COLOR_RESET}"
+    echo "${YELLOW}$FILE does not exist, downloading the clusterstamp now... ${COLOR_RESET}"
     wget -q --show-progress --progress=bar:force 2>&1 https://www.dropbox.com/s/rpyercs56zmay0z/FullNode1_clusterstamp.csv -P /home/$username/docker/data/
 fi
 
@@ -223,11 +221,11 @@ sed -i "s:ssl_certificate:ssl_certificate /etc/letsencrypt/live/$servername/full
 sed -i "s:ssl_key:ssl_certificate_key /etc/letsencrypt/live/$servername/privkey.pem;:g" /etc/nginx/sites-enabled/coti_fullnode.conf
 
 service nginx restart
-
+sleep 2
 #########################################
 # Create a temporary docker command file
 #########################################
-read -n 1 -r -s -p $'Press enter to begin docker pull fullnode command...\n'
+#read -n 1 -r -s -p $'Press enter to begin docker pull fullnode command...\n'
 tempfile="/home/$username/docker/tempdocker.sh"
 echo "cd /home/coti/docker" > $tempfile
 echo "VERSION=$new_version_tag.RELEASE docker-compose pull fullnode" >> $tempfile
@@ -235,19 +233,34 @@ echo "VERSION=$new_version_tag.RELEASE docker-compose up -d" >> $tempfile
 chmod +x $tempfile
 echo "Running docker-compose commands..."
 $tempfile
-
+sleep 1
+rm $tempfile
 #docker logs --tail 100 -f docker_fullnode_1
 
 
-echo "Waiting for Coti Node to Start"
-sleep 5
+echo "Waiting 30 seconds to check the logs..."
+sleep 30
 
+count_node_up=$(docker logs --tail 500 docker_fullnode_1 | grep -c "COTI FULL NODE IS UP")
 
-docker logs --tail -f docker_fullnode_1 | while read line; do
+echo "The phrase COTI NODE IS UP has been spotted $count_node_up times"
 
-#tail -f /home/coti/coti-fullnode/logs/FullNode1.log | while read line; do
-echo $line
-echo $line | grep -q 'COTI FULL NODE IS UP' && break;
-done
-sleep 2
-echo "${GREEN}Your node is registered and running on the COTI Network${RESET_COLOR}"
+if [[ $count_node_up -gt 0 ]];
+then
+
+cat << "NODEUPEOF"
+
+ ██████╗ ██████╗ ████████╗██╗    ███╗   ██╗ ██████╗ ██████╗ ███████╗    ██╗███████╗    ██╗   ██╗██████╗ ██╗
+██╔════╝██╔═══██╗╚══██╔══╝██║    ████╗  ██║██╔═══██╗██╔══██╗██╔════╝    ██║██╔════╝    ██║   ██║██╔══██╗██║
+██║     ██║   ██║   ██║   ██║    ██╔██╗ ██║██║   ██║██║  ██║█████╗      ██║███████╗    ██║   ██║██████╔╝██║
+██║     ██║   ██║   ██║   ██║    ██║╚██╗██║██║   ██║██║  ██║██╔══╝      ██║╚════██║    ██║   ██║██╔═══╝ ╚═╝
+╚██████╗╚██████╔╝   ██║   ██║    ██║ ╚████║╚██████╔╝██████╔╝███████╗    ██║███████║    ╚██████╔╝██║     ██╗
+ ╚═════╝ ╚═════╝    ╚═╝   ╚═╝    ╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚══════╝    ╚═╝╚══════╝     ╚═════╝ ╚═╝     ╚═╝
+
+NODEUPEOF
+
+echo "${GREEN}Your node is registered and running on the COTI Network ${COLOR_RESET}"
+else
+echo "${RED}Please check the logs below. We have been unable to determine if the node has started ${COLOR_RESET}"
+docker logs --tail 500 docker_fullnode_1
+fi

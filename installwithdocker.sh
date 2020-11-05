@@ -228,8 +228,8 @@ service nginx restart
 #########################################
 read -n 1 -r -s -p $'Press enter to begin docker pull fullnode command...\n'
 tempfile="/home/$username/docker/tempdocker.sh"
-echo "VERSION=$new_version_tag.RELEASE docker-compose pull fullnode" > $tempfile
-sleep 2
+echo "cd /home/coti/docker" > $tempfile
+echo "VERSION=$new_version_tag.RELEASE docker-compose pull fullnode" >> $tempfile
 echo "VERSION=$new_version_tag.RELEASE docker-compose up -d" >> $tempfile
 chmod +x $tempfile
 echo "Running docker-compose commands..."

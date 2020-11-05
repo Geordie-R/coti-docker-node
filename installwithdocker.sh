@@ -21,6 +21,8 @@ new_version_tag=${new_version_tag#"\""}
 new_version_tag=${new_version_tag%"\""}
 #new_version_tag=1.4.1 for example
 
+echo "Latest version is $new_version_tag"
+
 read -n 1 -r -s -p $'Press enter to continue...\n'
 
 echo "Welome to the COTI docker installer .  We will begin to ask you a series of questions.  Please have to hand:"
@@ -46,7 +48,6 @@ echo "Some details were not provided.  Script is now exiting.  Please run again 
 exit 1
 fi
 
-exit 1
 
 
 exec 3<>/dev/tcp/icanhazip.com/80
@@ -230,8 +231,9 @@ tempfile="/home/$username/docker/tempdocker.sh"
 echo "VERSION=$new_version_tag.RELEASE docker-compose pull fullnode" > $tempfile
 sleep 2
 echo "VERSION=$new_version_tag.RELEASE docker-compose up -d" >> $tempfile
-
-
+chmod +x $tempfile
+echo "Running docker-compose commands..."
+$tempfile
 
 #docker logs --tail 100 -f docker_fullnode_1
 

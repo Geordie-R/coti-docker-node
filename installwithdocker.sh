@@ -144,7 +144,8 @@ node.manager.port=7090
 node.manager.propagation.port=10001
 allow.transaction.monitoring=true
 whitelist.ips=127.0.0.1,0:0:0:0:0:0:0:1
-data.path='./data/'
+data.path=./data/
+node.manager.public.key=2fc59886c372808952766fa5a39d33d891af69c354e6a5934a258871407536d6705693099f076226ee5bf4b200422e56635a7f3ba86df636757e0ae42415f7c2
 EOF
 
 
@@ -154,9 +155,9 @@ EOF
 
 FILE=/home/$username/docker/data/FullNode1_clusterstamp.csv
 if [ -f "$FILE" ]; then
-    echo "${YELLOW}$FILE already exists, no need to download the clusterstamp file{COLOR_RESET}"
+    echo "${YELLOW}$FILE already exists, no need to download the clusterstamp file {COLOR_RESET}"
 else
-    echo "${YELLOW}$FILE does not exist, downloading the clusterstamp now...{COLOR_RESET}"
+    echo "${YELLOW}$FILE does not exist, downloading the clusterstamp now... {COLOR_RESET}"
     wget -q --show-progress --progress=bar:force 2>&1 https://www.dropbox.com/s/rpyercs56zmay0z/FullNode1_clusterstamp.csv -P /home/$username/docker/data/
 fi
 

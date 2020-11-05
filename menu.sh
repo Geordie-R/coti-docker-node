@@ -73,6 +73,8 @@ do
         "$newinstall")
         action="newinstall"
         echo "You chose a fresh install of Coti Node"
+        sleep 1
+        ./installwithdocker.sh
 
 
         break
@@ -80,6 +82,9 @@ do
         "$upgrade")
             echo "You chose to UPGRADE the docker node"
         action="upgrade"
+        sleep 1
+        ./upgradewithdocker.sh
+
         break
             ;;
        "$cancelit")

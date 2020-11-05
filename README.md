@@ -1,5 +1,14 @@
-# coti-docker-node
-Here is an easy to use coti docker container menu system to install fresh, or upgrade an existing node that already uses docker.
+# Coti Docker Node - Beta
+Here is an easy to use, coti docker node installer.
+
+## Instructions
+
+To either install a fresh coti docker node on a fresh VPS, or to upgrade your current coti docker node, it is the same instructions below.
+
+Login to your VPS using the root user, or alternatively switch to your root user with ```su - root```
+
+Then run the following
+
  ```
  mkdir -p ~/coti-docker-scripts
  cd ~/coti-docker-scripts
@@ -8,3 +17,13 @@ Here is an easy to use coti docker container menu system to install fresh, or up
  wget -O https://raw.githubusercontent.com/Geordie-R/coti-docker-node/main/upgradewithdocker.sh && chmod +x upgradewithdocker.sh
  ./menu.sh
 ```
+
+You will be given an easy to follow menu.  Choose the menu option you require and follow the prompts.  If you do not know any of the answers, leave the answer empty and it will terminate.
+
+If you have any questions reach me on Discord or Telegram.
+
+Also, if you have any feedback please let me know.
+
+## Users who want to switch to docker from non-docker node.
+
+If you are not using docker right now, but want to switch, I will be doing a script for this in the near future also.

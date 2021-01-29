@@ -15,7 +15,7 @@ Then run the following
  wget https://raw.githubusercontent.com/Geordie-R/coti-docker-node/main/menu.sh && chmod +x menu.sh
  wget https://raw.githubusercontent.com/Geordie-R/coti-docker-node/main/installwithdocker.sh && chmod +x installwithdocker.sh
  wget https://raw.githubusercontent.com/Geordie-R/coti-docker-node/main/upgradewithdocker.sh && chmod +x upgradewithdocker.sh
- ./menu.sh
+ ./menu-test.sh
 ```
 
 You will be given an easy to follow menu.  Choose the menu option you require and follow the prompts.  If you do not know any of the answers, leave the answer empty and it will terminate.

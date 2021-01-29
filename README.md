@@ -1,5 +1,5 @@
-# Coti Docker Node - Beta
-Here is an easy to use, coti docker node installer.
+# Coti Docker Node - Beta - Test Branch
+Here is an easy to use, coti docker node installer. We have branched the main to test a lower version.  Please ignore this branch
 
 ## Instructions
 

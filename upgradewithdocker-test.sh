@@ -19,9 +19,10 @@ new_version_tag=$(curl -s https://api.github.com/repos/coti-io/coti-node/release
 #Remove the front and end double quote
 new_version_tag=${new_version_tag#"\""}
 new_version_tag=${new_version_tag%"\""}
-#new_version_tag=1.4.1 for example
+#Overwrite latest for the test version hardcoded
+new_version_tag=1.4.1
 
-echo "Latest version is $new_version_tag"
+echo "test version is $new_version_tag"
 
 echo "Welcome to the COTI docker upgrader .  We will begin to ask you a series of questions.  Please have to hand:"
 echo "✅ Your Ubuntu Username"
